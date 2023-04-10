@@ -35,21 +35,27 @@ class Solution
 	    for(int i: nums){
 	        tSum += i;
 	    }
-        int[][] memMat = new int[n+1][tSum+1];
+        int[][] memMat = new int[2][tSum+1];
         
         for(int i=0;i<=tSum;i++){
-            memMat[n][i] = Math.abs(2*i-tSum);
+            memMat[1][i] = Math.abs(2*i-tSum);
         }
         
+        int iVal = 0;
         for(int i=n-1;i>=0;i--){
             for(int j=0;j<=tSum;j++){
-                memMat[i][j] = memMat[i+1][j];
+                int cVal = iVal%2;
+                int nVal = cVal+1;
+                nVal = nVal%2;
+                memMat[cVal][j] = memMat[nVal][j];
                 if(j+nums[i] <= tSum){
-                    memMat[i][j] = Math.min(memMat[i+1][j], memMat[i+1][j+nums[i]]);
+                    memMat[cVal][j] = Math.min(memMat[nVal][j], memMat[nVal][j+nums[i]]);
                 }
             }
+            iVal++;
         }
-        
-        return memMat[0][0];
+        iVal--;
+        iVal = iVal%2;
+        return memMat[iVal][0];
 	} 
 }
